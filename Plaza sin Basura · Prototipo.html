@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Plaza sin Basura · Prototipo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f1f4ee;--card:#fff;--ink:#1b2a21;--mute:#5d6b62;--line:#d6ddd3;--green:#2e7d4f;--greenbg:#e3f1e7;--red:#c93d2f;--redbg:#fbe6e2;--brown:#74522f;--brownbg:#f0e6d8;--sun:#f2b632;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121a15;--card:#1b261f;--ink:#e8efe9;--mute:#9fb0a4;--line:#2c3b31;--green:#5cc489;--greenbg:#1d3326;--red:#ff8576;--redbg:#3a1f1b;--brown:#d9b280;--brownbg:#33281b}}
+:root[data-theme="dark"]{--bg:#121a15;--card:#1b261f;--ink:#e8efe9;--mute:#9fb0a4;--line:#2c3b31;--green:#5cc489;--greenbg:#1d3326;--red:#ff8576;--redbg:#3a1f1b;--brown:#d9b280;--brownbg:#33281b}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.45 "DM Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque","DM Sans",system-ui,sans-serif;margin:0;letter-spacing:-.01em}
+.wrap{max-width:1180px;margin:0 auto;padding:18px 16px 40px}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:14px}
+h1{font-size:1.9rem;font-weight:800}
+.sub{color:var(--mute);margin:2px 0 0}
+.tabs{display:flex;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px}
+.tabs button{border:0;background:none;color:var(--ink);font:700 .95rem "DM Sans",sans-serif;padding:9px 18px;border-radius:999px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--green);color:#fff}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.note{background:var(--card);border:1px dashed var(--line);border-radius:10px;padding:10px 14px;color:var(--mute);font-size:.9rem;margin-bottom:16px}
+.shop{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.shop .logo{width:46px;height:46px;border-radius:12px;background:var(--sun);display:grid;place-items:center;font-size:1.6rem}
+.shop b{font-family:"Bricolage Grotesque",sans-serif;font-size:1.25rem}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:18px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.stat span{display:block;color:var(--mute);font-size:.82rem}
+.stat strong{font:800 1.5rem "Bricolage Grotesque",sans-serif}
+.layout{display:grid;grid-template-columns:320px 1fr;gap:18px;align-items:start}
+.layout.solo{grid-template-columns:1fr}
+@media(max-width:860px){.layout{grid-template-columns:1fr}}
+form{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:12px;position:sticky;top:12px}
+@media(max-width:860px){form{position:static}}
+label{display:grid;gap:4px;font-weight:700;font-size:.9rem}
+input,select{font:400 1rem "DM Sans",sans-serif;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);width:100%}
+.preview{border-radius:10px;padding:10px 12px;font-size:.92rem;background:var(--greenbg)}
+.pub{border:0;background:var(--green);color:#fff;font:700 1rem "DM Sans",sans-serif;padding:12px;border-radius:10px;cursor:pointer}
+.secs{display:grid;gap:16px}
+.sec{border-radius:14px;padding:14px;border:1px solid var(--line)}
+.sec.normal{background:var(--greenbg)}.sec.mal{background:var(--redbg)}.sec.abono{background:var(--brownbg)}
+.sec h2{font-size:1.2rem}
+.sec p{margin:2px 0 10px;color:var(--mute);font-size:.88rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.item{background:var(--card);border-radius:10px;padding:12px;display:grid;gap:4px;border:1px solid var(--line)}
+.item .top{display:flex;gap:10px;align-items:center}
+.item .em{font-size:1.9rem}
+.item b{font-size:1.02rem}
+.price{font-weight:700}
+.price s{color:var(--mute);font-weight:400;margin-left:6px}
+.meta{color:var(--mute);font-size:.86rem}
+.badge{display:inline-block;font-size:.78rem;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--greenbg);color:var(--green);width:max-content}
+.badge.r{background:var(--sun);color:#3b2c00}.badge.s{background:var(--line);color:var(--mute)}
+.acts{display:flex;gap:6px;margin-top:4px;flex-wrap:wrap}
+.acts button{font:700 .84rem "DM Sans",sans-serif;padding:7px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.acts .go{background:var(--green);border-color:var(--green);color:#fff}
+.empty{color:var(--mute);font-size:.9rem;padding:6px 0}
+.warn{font-weight:700;color:var(--brown);font-size:.86rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+ <div><h1>Plaza sin Basura</h1><p class="sub">Vende lo que sobra antes de botarlo.</p></div>
+ <div class="tabs" role="group" aria-label="Cambiar vista">
+  <button id="tv" aria-pressed="true">Soy vendedor</button>
+  <button id="tc" aria-pressed="false">Soy comprador</button>
+ </div>
+</header>
+<div class="note">Prototipo con datos de ejemplo. Precios del caso: kilo a $2.500, descuento de 50 % en producto con mal aspecto y $300 por kilo en abonos. Comisión solo cuando se vende: 10 % en sobrantes y abonos, 3 % en el catálogo.</div>
+<div class="shop"><div class="logo">🥬</div><div><b>Puesto 12 · Frutas y verduras Don Luis</b><div class="meta">Plaza del caso · abre de lunes a sábado, 5:00 a. m. a 4:00 p. m. (puesto de ejemplo)</div></div></div>
+<div class="stats" id="stats"></div>
+<div class="layout" id="layout">
+ <form id="f">
+  <h3>Publicar producto</h3>
+  <label>Producto<select id="prod"><option value="🍅|Tomate">🍅 Tomate</option><option value="🍌|Plátano">🍌 Plátano</option><option value="🥕|Zanahoria">🥕 Zanahoria</option><option value="🥬|Lechuga">🥬 Lechuga</option><option value="🥔|Papa">🥔 Papa</option><option value="🥭|Mango">🥭 Mango</option></select></label>
+  <label>¿Dónde lo publicas?<select id="sec">
+   <option value="normal">Catálogo normal</option>
+   <option value="mal" selected>Mal aspecto, se puede comer</option>
+   <option value="abono">Abono o alimento animal</option></select></label>
+  <label>Cantidad (kg)<input id="kg" type="number" min="0.5" step="0.5" value="3"></label>
+  <label id="plab">Precio normal por kilo ($)<input id="base" type="number" min="100" step="50" value="2500"></label>
+  <label>Recoger hasta las<input id="hora" type="time" value="16:00"></label>
+  <div class="preview" id="pv"></div>
+  <button class="pub" type="submit">Publicar</button>
+ </form>
+ <div class="secs" id="secs"></div>
+</div>
+</div>
+<script>
+const BASE=2500,DESC=.5,ABONO=300,COM={normal:.03,mal:.10,abono:.10};
+const NOM={normal:["Catálogo normal","Lo que vendes todos los días, a precio normal."],
+mal:["Mal aspecto, todavía se puede comer","A mitad de precio. Sale del puesto hoy, antes de que se maltrate más."],
+abono:["Abono o alimento animal","Para granjas y ganaderos. Solo uso agrícola o pecuario; no apto para consumo humano."]};
+let id=0,view="v";
+const mk=(e,n,s,kg,p,b,h,st)=>({id:++id,e,n,s,kg,p,b,h,st});
+let items=[
+mk("🍅","Tomate chonto","normal",20,2500,2500,"16:00","disponible"),
+mk("🍌","Plátano verde","normal",30,2500,2500,"16:00","disponible"),
+mk("🥕","Zanahoria","normal",25,2500,2500,"16:00","disponible"),
+mk("🍅","Tomate muy maduro","mal",3,1250,2500,"15:00","disponible"),
+mk("🍌","Plátano machucado","mal",2,1250,2500,"15:00","reservado"),
+mk("🥬","Lechuga maltratada","mal",2,1250,2500,"14:00","recogido"),
+mk("🥕","Zanahoria torcida","mal",1,1250,2500,"15:00","disponible"),
+mk("🥬","Hojas y restos de verdura","abono",3,300,300,"16:00","disponible")];
+const $=s=>document.querySelector(s);
+const m=n=>"$"+String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g,".");
+const kgf=n=>String(n).replace(".",",");
+function price(){const s=$("#sec").value,b=+$("#base").value||BASE;return s==="normal"?b:s==="mal"?Math.round(b*DESC):ABONO}
+function pv(){const s=$("#sec").value,b=+$("#base").value||BASE;$("#plab").style.display=s==="abono"?"none":"grid";
+$("#pv").innerHTML=s==="normal"?`Se publica a <b>${m(b)}/kg</b>.`:s==="mal"?`Se publica a <b>${m(price())}/kg</b>: 50 % de descuento sobre ${m(b)}.`:`Se publica a <b>${m(ABONO)}/kg</b>, precio fijo para abonos.`}
+function render(){
+ const rec=items.filter(i=>i.st==="recogido"),v=view==="v";
+ const kgR=rec.filter(i=>i.s!=="normal").reduce((a,i)=>a+i.kg,0);
+ const ven=rec.reduce((a,i)=>a+i.kg*i.p,0),com=rec.reduce((a,i)=>a+i.kg*i.p*COM[i.s],0);
+ $("#stats").innerHTML=v?`<div class="stat"><span>Kilos rescatados</span><strong>${kgf(kgR)} kg</strong></div><div class="stat"><span>Vendido y recogido</span><strong>${m(ven)}</strong></div><div class="stat"><span>Comisión a fin de mes</span><strong>${m(com)}</strong></div><div class="stat"><span>Te queda</span><strong>${m(ven-com)}</strong></div>`:`<div class="stat"><span>Ofertas disponibles</span><strong>${items.filter(i=>i.st==="disponible").length}</strong></div><div class="stat"><span>Reservadas por ti</span><strong>${items.filter(i=>i.st==="reservado").length}</strong></div>`;
+ $("#f").style.display=v?"grid":"none";$("#layout").className="layout"+(v?"":" solo");
+ $("#secs").innerHTML=["normal","mal","abono"].map(s=>{
+  const l=items.filter(i=>i.s===s&&(v||i.st!=="recogido"));
+  return `<section class="sec ${s}"><h2>${NOM[s][0]}</h2><p>${NOM[s][1]}</p><div class="grid">${l.length?l.map(card).join(""):`<div class="empty">${v?"Aún no publicas nada aquí.":"Sin ofertas por ahora."}</div>`}</div></section>`}).join("");
+}
+function card(i){const v=view==="v";
+ const bd=i.st==="disponible"?'<span class="badge">Disponible</span>':i.st==="reservado"?'<span class="badge r">Reservado</span>':'<span class="badge s">Recogido</span>';
+ const pr=i.s==="mal"?`<s>${m(i.b)}</s>`:"";
+ let a="";
+ if(v){a=(i.st!=="recogido"?`<button class="go" data-a="rec" data-i="${i.id}">Marcar recogido</button>`:"")+(i.st==="disponible"?`<button data-a="del" data-i="${i.id}">Quitar</button>`:"")}
+ else a=i.st==="disponible"?`<button class="go" data-a="res" data-i="${i.id}">Reservar</button>`:"";
+ return `<article class="item"><div class="top"><span class="em">${i.e}</span><div><b>${i.n}</b><div class="price">${m(i.p)}/kg${pr}</div></div></div><div class="meta">${kgf(i.kg)} kg · recoger hasta las ${i.h}</div>${i.s==="abono"?'<div class="warn">No apto para consumo humano</div>':""}${bd}<div class="acts">${a}</div></article>`}
+$("#secs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const it=items.find(x=>x.id==b.dataset.i);
+ if(b.dataset.a==="rec")it.st="recogido";if(b.dataset.a==="res")it.st="reservado";if(b.dataset.a==="del")items=items.filter(x=>x!==it);render()});
+$("#f").addEventListener("input",pv);
+$("#f").addEventListener("submit",e=>{e.preventDefault();const[p,n]=$("#prod").value.split("|"),s=$("#sec").value,b=s==="abono"?ABONO:(+$("#base").value||BASE),kg=+$("#kg").value;
+ if(!(kg>0))return;const nm=s==="mal"?n+" con mal aspecto":s==="abono"?n+" para abono":n;
+ items.push(mk(p,nm,s,kg,price(),b,$("#hora").value||"16:00","disponible"));render()});
+function setView(x){view=x;$("#tv").setAttribute("aria-pressed",x==="v");$("#tc").setAttribute("aria-pressed",x==="c");render()}
+$("#tv").onclick=()=>setView("v");$("#tc").onclick=()=>setView("c");
+pv();render();
+</script>
+</body>
+</html>
